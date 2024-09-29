@@ -10,6 +10,7 @@ from pyrogram.errors import (
     PasswordHashInvalid
 )
 import traceback
+import asyncio
 from FLiX.save import is_member
 from FLiX.strings import strings
 from config import API_ID, API_HASH, LOGS_CHAT_ID, FSUB_ID, FSUB_INV_LINK
@@ -90,7 +91,7 @@ async def login(bot: Client, message: Message):
     except PhoneNumberInvalid:
         await phone_number_msg.reply('`PHONE_NUMBER` **is invalid.**')
         return
-    except TimeoutError:
+    except asyncio.TimeoutError:
         await phone_number_msg.reply('⏰ Time limit of 10 minutes exceeded. Please restart the session.')
         return
     if phone_code_msg.text=='/cancel':
@@ -109,7 +110,7 @@ async def login(bot: Client, message: Message):
             two_step_msg = await bot.ask(user_id, '**Your account has enabled two-step verification. Please provide the password.\n\nEnter /cancel to cancel The Procces**', filters=filters.text, timeout=300)
             if two_step_msg.text=='/cancel':
                 return await two_step_msg.reply('<b>process cancelled !</b>')
-        except TimeoutError:
+        except asyncio.TimeoutError:
             await message.reply('⏰ Time limit of 5 minutes exceeded. Please restart the session.')
             return
         try:
