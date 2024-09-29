@@ -10,7 +10,7 @@ from database.db import database
 
 
 @Client.on_message(filters.command(["test"]))
-async def send_start(client: Client, message: Message):
+async def TEST(client: Client, message: Message):
 
     # Check if the user is a member of the required channel/group
     if not await is_member(client, message.from_user.id):
