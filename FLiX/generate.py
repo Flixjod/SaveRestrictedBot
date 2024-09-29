@@ -24,7 +24,7 @@ def get(obj, key, default=None):
     except:
         return default
 
-@Client.on_message(filters.command(["logout"]))
+@Client.on_message(filters.private & filters.command(["logout"]))
 async def logout(client: Client, message: Message):
     print("Logout command received")
     try:
@@ -46,7 +46,7 @@ async def logout(client: Client, message: Message):
         print(f"Logout error: {e}")
 
 
-@Client.on_message(filters.private & ~filters.forwarded & filters.command(["login"]))
+@Client.on_message(filters.private & filters.command(["login"]))
 async def login(bot: Client, message: Message):
     # Check if the user is a member of the required channel/group
     if not await is_member(bot, message.from_user.id):
