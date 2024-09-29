@@ -10,7 +10,7 @@ API_ID = int(os.environ.get("API_ID", ""))
 API_HASH = os.environ.get("API_HASH", "")
 
 # OWNER IDs
-OWNER_ID = list(map(int, os.getenv("OWNER_ID", "").split(",")))
+OWNER_ID = list(map(int, getenv("OWNER_ID", "").split()))
 
 #Database 
 DB_URI = os.environ.get("DB_URI", "")
