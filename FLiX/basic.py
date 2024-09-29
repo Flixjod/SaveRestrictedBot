@@ -7,6 +7,7 @@ import os
 import threading
 from config import API_ID, API_HASH, OWNER_ID, FSUB_ID, FSUB_INV_LINK
 from database.db import database 
+from FLiX.save import is_member
 
 
 @Client.on_message(filters.command(["test"]))
