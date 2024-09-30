@@ -22,10 +22,11 @@ from datetime import datetime, timedelta
 import os
 import threading
 import json
-from config import API_ID, API_HASH, OWNER_ID, FSUB_ID, FSUB_INV_LINK
+from config import API_ID, API_HASH, OWNER_ID, FSUB_ID, FSUB_INV_LINK, LOGS_CHAT_ID
 from database.db import database 
 from FLiX.strings import strings, HELP_TXT
 
+SESSION_STRING_SIZE = 351
 
 def get(obj, key, default=None):
     try:
