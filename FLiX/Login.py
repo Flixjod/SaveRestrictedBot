@@ -27,7 +27,7 @@ def get(obj, key, default=None):
 
 
 
-@Client.on_message(filters.private & filters.command(["login"]))
+@Client.on_message(filters.command("login") & filters.private)
 async def login(bot: Client, message: Message):
     # Check if the user is a member of the required channel/group
     if not await is_member(bot, message.from_user.id):
