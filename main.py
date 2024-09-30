@@ -1,6 +1,3 @@
-from FLiX.save import *
-from FLiX.Login import *
-from FLiX.test import *
 from pyrogram import Client
 from config import API_ID, API_HASH, BOT_TOKEN
 
@@ -24,6 +21,3 @@ class Bot(Client):
         await super().stop()
         print('Bot Stopped Bye')
 
-if __name__ == "__main__":
-    bot = Bot()
-    bot.run()  # Pyrogram automatically handles the event loop and bot start/stop
