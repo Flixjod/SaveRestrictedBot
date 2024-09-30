@@ -6,6 +6,7 @@ from config import API_ID, API_HASH, BOT_TOKEN
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 
+
 # Initialize the bot client with custom parameters
 bot = Client(
     "FLIX_savelogin",
@@ -27,16 +28,15 @@ for filename in os.listdir(plugins_path):
         except Exception as e:
             logging.error(f"Error loading plugin {filename}: {e}")
 
-# Start the bot
-@bot.on_start()
-async def on_start(client):
-    logging.info("Bot Started Powered By @FLiX_LY")  # Update startup message
+# Run the bot
+if __name__ == "__main__":
+    try:
+        bot.run()  # Start the bot
+        logging.info("Bot Started Powered By @FLiX_LY")  # Log startup message
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
 
 # Handle bot shutdown
 @bot.on_shutdown()
 async def on_shutdown(client):
     logging.info("Alvida! The bot is shutting down.")
-
-# Run the bot
-if __name__ == "__main__":
-    bot.run()
