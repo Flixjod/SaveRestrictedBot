@@ -25,26 +25,6 @@ def get(obj, key, default=None):
     except:
         return default
 
-@Client.on_message(filters.private & filters.command(["logout"]))
-async def logout(client: Client, message: Message):
-    print("Logout command received")
-    try:
-        if not await is_member(client, message.from_user.id):
-            # Your existing code
-            print("User is not a member.")
-            return
-        
-        user_data = database.sessions.find_one({"user_id": message.chat.id})
-        if user_data is None or not user_data.get('logged_in', False):
-            print("User is not logged in.")
-            await message.reply("**You are not logged in! Please /login first.**")
-            return
-        
-        # Your existing code to update database
-        print("User logged out successfully.")
-        await message.reply("**Logout Successfully** ♦")
-    except Exception as e:
-        print(f"Logout error: {e}")
 
 
 @Client.on_message(filters.private & filters.command(["login"]))
