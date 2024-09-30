@@ -1,42 +1,29 @@
+from FLiX.save import *
+from FLiX.Login import *
+from FLiX.test import *
 from pyrogram import Client
-import os
-import logging
 from config import API_ID, API_HASH, BOT_TOKEN
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
+class Bot(Client):
+    def __init__(self):
+        super().__init__(
+            "FLIX_savelogin",
+            api_id=API_ID,
+            api_hash=API_HASH,
+            bot_token=BOT_TOKEN,
+            plugins=dict(root="FLiX"),
+            workers=50,
+            sleep_threshold=10
+        )
 
+    async def start(self):
+        await super().start()
+        print('Bot Started Powered By @FLiX_LY')
 
-# Initialize the bot client with custom parameters
-bot = Client(
-    "FLIX_savelogin",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    bot_token=BOT_TOKEN,
-    plugins={'root': 'FLiX'},  # Specify the root directory for plugins
-    workers=50,  # Number of workers for handling requests
-    sleep_threshold=10  # Threshold for sleeping between requests
-)
+    async def stop(self, *args):
+        await super().stop()
+        print('Bot Stopped Bye')
 
-# Load plugins from the FLiX folder
-plugins_path = "FLiX"
-for filename in os.listdir(plugins_path):
-    if filename.endswith(".py") and filename != "__init__.py":
-        try:
-            bot.load_plugin(f"{plugins_path}.{filename[:-3]}")  # Load plugin without .py extension
-            logging.info(f"Loaded plugin: {filename}")
-        except Exception as e:
-            logging.error(f"Error loading plugin {filename}: {e}")
-
-# Run the bot
 if __name__ == "__main__":
-    try:
-        bot.run()  # Start the bot
-        logging.info("Bot Started Powered By @FLiX_LY")  # Log startup message
-    except Exception as e:
-        logging.error(f"An error occurred: {e}")
-
-# Handle bot shutdown
-@bot.on_shutdown()
-async def on_shutdown(client):
-    logging.info("Alvida! The bot is shutting down.")
+    bot = Bot()
+    bot.run()  # Pyrogram automatically handles the event loop and bot start/stop
