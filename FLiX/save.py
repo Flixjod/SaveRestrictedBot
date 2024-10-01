@@ -141,12 +141,10 @@ async def send_start(client: Client, message: Message):
         database.users.insert_one({
             'user_id': message.from_user.id,
             'first_name': message.from_user.first_name,
-            'registered_at': time.time(),
+            'registered_at': datetime.now(pytz.timezone('Asia/Kolkata')),
             'plan': 'free',
 	    'premium_expiration': None,
             'last_download_time': None
-            
-            
         })
 	
     buttons = [[
