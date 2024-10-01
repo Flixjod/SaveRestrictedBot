@@ -19,16 +19,8 @@ class Bot(Client):
         print(f"@{bot_info.username} Is Started Powered By @FLiX_LY")
         
         print("All Command Handlers:")
-        for group_key, group_handlers in self.dispatcher.groups.items():
-            for handler in group_handlers:
-                # Check if the handler is related to commands by looking for filters.command
-                if hasattr(handler, 'filters') and handler.filters:
-                    if isinstance(handler.filters, filters.Filter) and hasattr(handler.filters, 'commands'):
-                        commands = handler.filters.commands  # Get the list of commands
-                        handler_name = handler.callback.__name__  # Get handler function name
-                        for command in commands:
-                            print(f"- Command: {command}, Handler: {handler_name}")
-
+        for command, handler in self.command_list:
+            print(f"- Command: {command}, Handler: {handler.__name__}")
     
 
     async def stop(self, *args):
