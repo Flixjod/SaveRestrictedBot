@@ -262,6 +262,17 @@ async def check_plan(client: Client, message: Message):
     user_id = message.from_user.id
 
     # Check if the user is in the database
+    
+import pytz  # Ensure pytz is imported
+
+@Client.on_message(filters.command("checkplan") & filters.private)
+async def check_plan(client: Client, message: Message):
+    user_id = message.from_user.id
+
+    # Check and possibly update the user's plan
+    Check_Plan(user_id)  # Call the function to check plan
+
+    # Check if the user is in the database
     user_data = database.users.find_one({'user_id': user_id})
 
     if not user_data:
@@ -273,16 +284,18 @@ async def check_plan(client: Client, message: Message):
     premium_expiration = user_data.get('premium_expiration')
 
     if plan == 'free':
-        response = "Your current plan is **Free**.\n\nYou can upgrade to premium for additional features."
+        await message.reply("Your current plan is **Free**.\n\nYou can upgrade to premium for additional features.")
     else:
         if premium_expiration:
-            expiration_date = premium_expiration.strftime('%Y-%m-%d %H:%M:%S')
-            response = f"Your current plan is **Premium**.\n\n⏳ **Expiry Date:** {expiration_date} (UTC)"
+            # Convert UTC expiration date to IST
+            ist_timezone = pytz.timezone('Asia/Kolkata')
+            expiration_date_ist = premium_expiration.astimezone(ist_timezone)
+            expiration_date_str = expiration_date_ist.strftime('%Y-%m-%d %H:%M:%S')
+
+            await message.reply(f"Your current plan is **Premium**.\n\n⏳ **Expiry Date:** {expiration_date_str} (IST)")
         else:
-            response = "Your current plan is **Premium**, but the expiration date is not set."
-
-    await message.reply(response)
-
+            await message.reply("Your current plan is **Premium**, but the expiration date is not set.")
+		
 
 @Client.on_message(filters.command("remove") & filters.private)
 async def remove_premium(client, message):
