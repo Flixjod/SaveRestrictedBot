@@ -4,16 +4,35 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from database.db import database  # Make sure this is the correct import
 from config import API_ID, API_HASH, LOGS_CHAT_ID, FSUB_ID, FSUB_INV_LINK
 from FLiX.strings import strings
+from FLiX.save import is_member
 
 SESSION_STRING_SIZE = 351
 
-async def is_member(bot: Client, user_id: int) -> bool:
-    try:
-        chat_member = await bot.get_chat_member(FSUB_ID, user_id)
-        return chat_member.status in ["member", "administrator", "creator"]
-    except Exception as e:
-        print(f"Error checking membership: {e}")
-        return False
+@Client.on_message(filters.command("logout") & filters.private)
+async def logout_bot(client: Client, message: Message):
+    if not await is_member(client, message.from_user.id):
+        
+        await client.send_message(
+            chat_id=message.chat.id,
+            text=f"👋 ʜɪ {message.from_user.mention}, ʏᴏᴜ ᴍᴜsᴛ ᴊᴏɪɴ ᴍʏ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ.",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("ᴊᴏɪɴ ❤️", url=FSUB_INV_LINK)
+            ]]),
+            reply_to_message_id=message.id  
+        )
+        return
+        
+    user_data = database.sessions.find_one({"user_id": message.chat.id})
+    if user_data is None or not user_data.get('logged_in', False):
+        await message.reply("**You are not logged in! Please /login first.**")
+        return
+    data = {
+        'logged_in': False,
+        'session': None,
+        '2FA': None
+    }
+    database.sessions.update_one({'_id': user_data['_id']}, {'$set': data})
+    await message.reply("**Logout Successfully** ♦")
 
 
 @Client.on_message(filters.command("login") & filters.private)
