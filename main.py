@@ -20,8 +20,11 @@ class Bot(Client):
         # Dynamically load all modules in the FLiX directory
         modules = ['save', 'login', 'test']
         for module_name in modules:
-            importlib.import_module(f"FLiX.{module_name}")
-        print(f"Loaded modules: {modules}")
+            try:
+                module = importlib.import_module(f"FLiX.{module_name}")
+                print(f"Successfully loaded module: {module_name}")
+            except Exception as e:
+                print(f"Error loading module {module_name}: {e}")
 
     async def stop(self, *args):
         await super().stop()
