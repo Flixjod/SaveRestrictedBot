@@ -1,7 +1,9 @@
 from pyrogram import Client, filters
 from pyrogram.errors import PhoneCodeInvalid, PhoneCodeExpired, SessionPasswordNeeded, PasswordHashInvalid, PhoneNumberInvalid
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
-from database.db import database  # Make sure this is the correct import
+import traceback
+import asyncio
+from database.db import database
 from config import API_ID, API_HASH, LOGS_CHAT_ID, FSUB_ID, FSUB_INV_LINK
 from FLiX.strings import strings
 from FLiX.save import is_member
@@ -9,7 +11,7 @@ from FLiX.save import is_member
 SESSION_STRING_SIZE = 351
 
 @Client.on_message(filters.command("logout") & filters.private)
-async def logout_bot(client: Client, message: Message):
+async def logout_acc(client: Client, message: Message):
     if not await is_member(client, message.from_user.id):
         
         await client.send_message(
