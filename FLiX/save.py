@@ -259,6 +259,33 @@ async def upgrade_to_premium(client, message):
         await message.reply(f"**An error occurred:** {e}")
 
 
+@Client.on_message(filters.command("checkplan") & filters.private)
+async def check_plan(client: Client, message: Message):
+    user_id = message.from_user.id
+
+    # Check if the user is in the database
+    user_data = database.users.find_one({'user_id': user_id})
+
+    if not user_data:
+        await message.reply("**❌ You are not registered. Please use /start to register.**")
+        return
+
+    # Get the plan and expiration details
+    plan = user_data.get('plan', 'free')
+    premium_expiration = user_data.get('premium_expiration')
+
+    if plan == 'free':
+        response = "Your current plan is **Free**.\n\nYou can upgrade to premium for additional features."
+    else:
+        if premium_expiration:
+            expiration_date = premium_expiration.strftime('%Y-%m-%d %H:%M:%S')
+            response = f"Your current plan is **Premium**.\n\n⏳ **Expiry Date:** {expiration_date} (UTC)"
+        else:
+            response = "Your current plan is **Premium**, but the expiration date is not set."
+
+    await message.reply(response)
+
+
 @Client.on_message(filters.command("remove") & filters.private)
 async def remove_premium(client, message):
     try:
