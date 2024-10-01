@@ -2,9 +2,10 @@ from pyrogram import Client, filters
 from pyrogram.errors import PhoneCodeInvalid, PhoneCodeExpired, SessionPasswordNeeded, PasswordHashInvalid, PhoneNumberInvalid
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from database.db import database  # Make sure this is the correct import
-from config import API_ID, API_HASH, LOGS_CHAT_ID, FSUB_ID, FSUB_INV_LINK, SESSION_STRING_SIZE
+from config import API_ID, API_HASH, LOGS_CHAT_ID, FSUB_ID, FSUB_INV_LINK
 from FLiX.strings import strings
 
+SESSION_STRING_SIZE = 351
 
 async def is_member(bot: Client, user_id: int) -> bool:
     try:
