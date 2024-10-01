@@ -8,7 +8,7 @@ class Bot(Client):
             api_id=API_ID,
             api_hash=API_HASH,
             bot_token=BOT_TOKEN,
-            plugins=dict(root="FLiX"),  # Load plugins from FLiX directory
+            plugins=dict(root="FLiX"),
             workers=50,
             sleep_threshold=10
         )
@@ -16,17 +16,17 @@ class Bot(Client):
     async def start(self):
         await super().start()
         bot_info = await self.get_me()  # Get bot information
-        print(f"@{bot_info.username} Bot Started Powered By @FLiX_LY")
+        print(f"@{bot_info.username} Is Started Powered By @FLiX_LY")
         
-        # Print all registered command handlers
-        command_handlers = [handler for handler in self.handlers if handler.filters and handler.filters.command]
+        command_handlers = self.get_handlers()
         print("All Command Handlers:")
         for handler in command_handlers:
-            commands = handler.filters.command
-            handler_name = handler.callback.__name__  # Get the name of the handler function
-            for command in commands:
-                print(f"- Command: {command}, Handler: {handler_name}")
+            if handler.filters and handler.filters.command:
+                commands = handler.filters.command
+                handler_name = handler.callback.__name__  # Get the name of the handler function
+                for command in commands:
+                    print(f"- Command: {command}, Handler: {handler_name}")
 
     async def stop(self, *args):
         await super().stop()
-        print("Bot Stopped Bye")
+        print("Bot Stopped. Alvida!")  # Updated stop message
