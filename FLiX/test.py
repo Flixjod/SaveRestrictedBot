@@ -6,6 +6,6 @@ from database.db import database
 
 @Client.on_message(filters.command("test") & filters.private)
 async def test(client: Client, message: Message):
-    
+    print("test command received")  # Debugging log
 
     await message.reply("**Test command received! You are logged in.**")
