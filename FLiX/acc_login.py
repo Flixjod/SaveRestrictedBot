@@ -68,7 +68,7 @@ async def login_acc(bot: Client, message: Message):
         return
     
     user_id = message.from_user.id
-    phone_number_msg = await bot.ask(chat_id=user_id, text="<b>Please send your phone number including country code</b>\nExample: <code>+1234567890</code>")
+    phone_number_msg = await bot.ask(chat_id=user_id, text="<b>Please send your phone number which includes country code</b>\n<b>Example:</b> <code>+13124562345, +9171828181889</code>")
     
     if phone_number_msg.text == '/cancel':
         return await phone_number_msg.reply('<b>Process cancelled!</b>')
@@ -81,12 +81,12 @@ async def login_acc(bot: Client, message: Message):
 
     try:
         code = await client.send_code(phone_number)
-        phone_code_msg = await bot.ask(user_id, "**Please send OTP (format: `1 2 3 4 5`).\nSend /cancel to cancel the process.**", filters=filters.text, timeout=600)
+        phone_code_msg = await bot.ask(user_id, "Please check for an OTP in official telegram account. If you got it, send OTP here after reading the below format. \n\nIf OTP is `12345`, **please send it as** `1 2 3 4 5`.\n\n**Enter /cancel to cancel The Procces**", filters=filters.text, timeout=600)
     except PhoneNumberInvalid:
         await phone_number_msg.reply('**Invalid phone number.**')
         return
     except asyncio.TimeoutError:
-        await phone_number_msg.reply('**Time limit exceeded. Please restart.**')
+        await phone_number_msg.reply('**⏰ Time limit of 10 minutes exceeded. Please restart the session.**')
         return
 
     if phone_code_msg.text == '/cancel':
@@ -104,11 +104,11 @@ async def login_acc(bot: Client, message: Message):
         return
     except SessionPasswordNeeded:
         try:
-            two_step_msg = await bot.ask(user_id, '**Two-step verification enabled. Provide password.\nSend /cancel to cancel.**', filters=filters.text, timeout=300)
+            two_step_msg = await bot.ask(user_id, '**Your account has enabled two-step verification. Please provide the password.\n\nEnter /cancel to cancel The Procces**', filters=filters.text, timeout=300)
             if two_step_msg.text == '/cancel':
                 return await two_step_msg.reply('<b>Process cancelled!</b>')
         except asyncio.TimeoutError:
-            await message.reply('**Time limit exceeded. Restart the session.**')
+            await message.reply('**⏰ Time limit of 5 minutes exceeded. Please restart the session.**')
             return
         
         try:
@@ -122,7 +122,7 @@ async def login_acc(bot: Client, message: Message):
     await client.disconnect()
 
     if len(string_session) < SESSION_STRING_SIZE:
-        return await message.reply('<b>Invalid session string</b>')
+        return await message.reply('<b>Invalid Session String</b>')
 
     # Update session data in the database
     data = {
