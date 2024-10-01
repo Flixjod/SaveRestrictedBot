@@ -18,14 +18,15 @@ class Bot(Client):
         bot_info = await self.get_me()  # Get bot information
         print(f"@{bot_info.username} Is Started Powered By @FLiX_LY")
         
-        command_handlers = self.get_handlers()
         print("All Command Handlers:")
-        for handler in command_handlers:
-            if handler.filters and handler.filters.command:
-                commands = handler.filters.command
-                handler_name = handler.callback.__name__  # Get the name of the handler function
-                for command in commands:
-                    print(f"- Command: {command}, Handler: {handler_name}")
+        for group in self.dispatcher.groups:
+            for handler in group:
+                if handler.filters and isinstance(handler.filters, filters.Command):
+                    commands = handler.filters.commands  # Get list of commands
+                    handler_name = handler.callback.__name__  # Get handler function name
+                    for command in commands:
+                        print(f"- Command: {command}, Handler: {handler_name}")
+       
 
     async def stop(self, *args):
         await super().stop()
