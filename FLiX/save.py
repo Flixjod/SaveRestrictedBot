@@ -156,7 +156,7 @@ async def send_start(client: Client, message: Message):
         InlineKeyboardButton('🤖 ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url='https://t.me/Flix_botz')
 	]]
     reply_markup = InlineKeyboardMarkup(buttons)
-    await client.send_message(message.chat.id, f"<b>👋 Hi {message.from_user.mention}, I am Save Restricted Content Bot, I can send you restricted content by its post link.\n\n ✅ /login » For downloading \n\n ❌ /logout » For Logout account \n\n 💟 /help » Know how to use bot by </b>", reply_markup=reply_markup, reply_to_message_id=message.id)
+    await client.send_message(message.chat.id, f"<b>👋 Hi {message.from_user.mention}, I am Save Restricted Content Bot, I can send you restricted content by its post link.\n\n ✅ /login » For downloading \n\n ❌ /logout » For Logout account \n\n⏱️ /myplan » Know Your Plan Info \n\n💟 /help » Know how to use bot by </b>", reply_markup=reply_markup, reply_to_message_id=message.id)
     return
 
 
@@ -259,7 +259,7 @@ async def upgrade_to_premium(client, message):
         await message.reply(f"**An error occurred:** {e}")
 
 
-@Client.on_message(filters.command("checkplan") & filters.private)
+@Client.on_message(filters.command("myplan") & filters.private)
 async def check_plan(client: Client, message: Message):
     user_id = message.from_user.id
 
