@@ -21,13 +21,13 @@ class Bot(Client):
         print("All Command Handlers:")
         for group_key, group_handlers in self.dispatcher.groups.items():
             for handler in group_handlers:
-                # Ensure handler has 'filters' and 'commands' attributes
-                if hasattr(handler, 'filters') and isinstance(handler.filters, filters.Command):
+                # Check if the handler has 'filters' and if it's a command handler
+                if hasattr(handler, 'filters') and isinstance(handler.filters, filters.command):
                     commands = handler.filters.commands  # Get list of commands
                     handler_name = handler.callback.__name__  # Get handler function name
                     for command in commands:
                         print(f"- Command: {command}, Handler: {handler_name}")
-
+    
 
     async def stop(self, *args):
         await super().stop()
