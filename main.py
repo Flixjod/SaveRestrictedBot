@@ -18,11 +18,7 @@ class Bot(Client):
         bot_info = await self.get_me()  # Get bot information
         print(f"@{bot_info.username} Is Started Powered By @FLiX_LY")
         
-        print("All Command Handlers:")
-        for command, handler in self.command_list:
-            print(f"- Command: {command}, Handler: {handler.__name__}")
-    
-
+        
     async def stop(self, *args):
         await super().stop()
         print("Bot Stopped. Alvida!")  # Updated stop message
