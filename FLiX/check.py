@@ -17,7 +17,7 @@ async def is_member(bot: Client, user_id: int) -> bool:
 
 
 @Client.on_message(filters.command("login") & filters.private)
-async def login(bot: Client, message: Message):
+async def login_acc(bot: Client, message: Message):
     # Check if the user is a member
     if not await is_member(bot, message.from_user.id):
         await bot.send_message(
