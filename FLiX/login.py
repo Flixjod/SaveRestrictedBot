@@ -24,7 +24,7 @@ def get(obj, key, default=None):
     except:
         return default
 
-@Client.on_message(filters.command(["logout"]))
+@Client.on_message(filters.command("logout") & filters.private)
 async def logout(client: Client, message: Message):
     if not await is_member(client, message.from_user.id):
         
