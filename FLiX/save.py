@@ -261,14 +261,6 @@ async def upgrade_to_premium(client, message):
 async def check_plan(client: Client, message: Message):
     user_id = message.from_user.id
 
-    # Check if the user is in the database
-    
-import pytz  # Ensure pytz is imported
-
-@Client.on_message(filters.command("checkplan") & filters.private)
-async def check_plan(client: Client, message: Message):
-    user_id = message.from_user.id
-
     # Check and possibly update the user's plan
     Check_Plan(user_id)  # Call the function to check plan
 
@@ -295,7 +287,8 @@ async def check_plan(client: Client, message: Message):
             await message.reply(f"Your current plan is **Premium**.\n\n⏳ **Expiry Date:** {expiration_date_str} (IST)")
         else:
             await message.reply("Your current plan is **Premium**, but the expiration date is not set.")
-		
+
+
 
 @Client.on_message(filters.command("remove") & filters.private)
 async def remove_premium(client, message):
