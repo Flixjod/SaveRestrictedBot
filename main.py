@@ -15,7 +15,8 @@ class Bot(Client):
 
     async def start(self):
         await super().start()
-        print("Bot Started Powered By @FLiX_LY")
+        bot_info = await self.get_me()  # Get bot information
+        print(f"@{bot_info.username} Bot Started Powered By @FLiX_LY")
 
     async def stop(self, *args):
         await super().stop()
