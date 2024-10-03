@@ -25,6 +25,9 @@ def get(obj, key, default=None):
 	    
 
 async def is_member(client: Client, user_id: int) -> bool:
+    if not FSUB_ID:  # If FSUB_ID is not set or is empty, return True
+        return True
+	
     try:
         # Get the chat member information
         chat_member = await client.get_chat_member(FSUB_ID, user_id)
