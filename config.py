@@ -1,4 +1,8 @@
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 #Bot token @Botfather
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
